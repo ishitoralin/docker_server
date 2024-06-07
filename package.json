@@ -1,0 +1,19 @@
+{
+  "name": "nexcom-training-project",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-handlebars": "^7.1.2"
+  },
+  "engines": {
+    "node": ">=18.16.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "nodemon": "^3.1.3"
+  }
+}
