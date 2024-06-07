@@ -1,18 +1,14 @@
 const express = require('express')
 const cors = require('cors')
 const app = express()
-
-
-const basicroute = require('./routes/basicRoute')
-const dockerInfo = require('./routes/dockerInfo')
+const dockerRouters = require('./routes/dockerRouters')
 
 app.get('/', (req, res) => {
     res.type('text/plain')
-    res.send('server is on 123')
+    res.send('Welcome to Docker Remote API')
 })
 
-app.use('/basic', basicroute)
-app.use('/info', dockerInfo)
+app.use('/api/docker', dockerRouters)
 
 // cors: 3000 for fronted-end, 8080 for database(MySQL)
 const whitelist = ['http://localhost:3000/', 'http://localhost:8080/']
