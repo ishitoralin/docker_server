@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const networkList = require('./networkList');
+const listNetworks = require('./listNetworks');
 
-router.use('/', networkList);
+router.use('/', listNetworks);
 
 
 module.exports = router;

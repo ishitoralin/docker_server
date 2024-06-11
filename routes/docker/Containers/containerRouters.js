@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const containerList = require('./containerList');
+const listContainers = require('./listContainers');
 
-router.use('/', containerList);
+router.use('/', listContainers);
 
 
 module.exports = router;
