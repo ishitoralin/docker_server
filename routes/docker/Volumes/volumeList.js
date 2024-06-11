@@ -5,8 +5,8 @@ const { resultsHandler } = require('../processer');
 const Docker = require('dockerode')
 const docker = new Docker();
 
-router.get('/list', (req, res) => {
-    docker.listContainers({ all: true }, (err, data) => {
+router.get('/', (req, res) => {
+    docker.listVolumes((err, data) => {
         resultsHandler(res, err, data)
     });
 })
