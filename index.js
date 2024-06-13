@@ -8,19 +8,19 @@ app.get('/', (req, res) => {
     res.send('Welcome to Docker Remote API')
 })
 
-const whitelist = ['http://10.15.1.82:3000', 'http://10.15.1.82:8080', 'http://10.15.1.82:3001'];
-const corsOptions = {
-    origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1 || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
-};
+// const whitelist = ['http://10.15.1.82:3000', 'http://10.15.1.82:8080', 'http://10.15.1.82:3001'];
+// const corsOptions = {
+//     origin: function (origin, callback) {
+//         if (whitelist.indexOf(origin) !== -1 || !origin) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     },
+//     credentials: true,
+// };
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use('/api/docker', dockerRouters)
 

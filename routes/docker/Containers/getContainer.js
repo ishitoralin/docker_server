@@ -5,8 +5,9 @@ const { resultsHandler } = require('../processer');
 const Docker = require('dockerode')
 const docker = new Docker();
 
-router.get('/json', (req, res) => {
-    docker.listContainers({ all: true }, (err, data) => {
+router.get('/:name/json', (req, res) => {
+    const name = req.params.name
+    docker.getContainer(name).inspect((err, data) => {
         resultsHandler(res, err, data)
     });
 })
