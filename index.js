@@ -1,28 +1,23 @@
-const express = require('express')
-const cors = require('cors')
+import express from 'express';
+import cors from 'cors';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
+import routers from './routes/routers.js';
+
 const app = express()
-const dockerRouters = require('./routes/dockerRouters')
-
-app.get('/', (req, res) => {
-    res.type('text/plain')
-    res.send('Welcome to Docker Remote API')
-})
-
-// const whitelist = ['http://10.15.1.82:3000', 'http://10.15.1.82:8080', 'http://10.15.1.82:3001'];
-// const corsOptions = {
-//     origin: function (origin, callback) {
-//         if (whitelist.indexOf(origin) !== -1 || !origin) {
-//             callback(null, true);
-//         } else {
-//             callback(new Error('Not allowed by CORS'));
-//         }
-//     },
-//     credentials: true,
-// };
 
 app.use(cors());
+app.use(morgan('dev'));
+app.use(bodyParser.json())
+app.use(express.json({ limit: '500mb' }));
+app.use(express.urlencoded({ limit: '500mb', extended: true }));
 
-app.use('/api/docker', dockerRouters)
+app.use('/', routers)
+
+// app.use(express.static(path.join(__dirname, 'dist')));
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+// });
 
 app.use((err, req, res, next) => {
     console.log(err.message)
@@ -31,10 +26,13 @@ app.use((err, req, res, next) => {
 })
 
 app.use('*', (req, res) => {
-    res.status(404).json({ message: 'the page does not exist' })
-})
+    // res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    res.status(404)
+    res.send('404 - Page not found')
+});
 
-const port = process.env.PORT || 3001
-app.listen(port, () => {
-    console.log(`Express started on http://localhost:${port}`)
-})
+const port = process.env.PORT || 8866
+const server = app.listen(port, () => {
+    const actualPort = server.address().port;
+    console.log(`Server is running on http://localhost:${actualPort}`);
+});
