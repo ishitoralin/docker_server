@@ -10,5 +10,10 @@ router.get('/info', (req, res) => {
         resultsHandler(res, err, data)
     });
 })
+// router.get('/info', (req, res) => {
+//     docker.info((err, data) => {
+//         resultsHandler(res, err, data)
+//     });
+// })
 
 module.exports = router
