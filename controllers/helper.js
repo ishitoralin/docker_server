@@ -1,10 +1,19 @@
 import { exec, execSync, execFileSync } from 'child_process';
-export const handleResponse = (err, data, res) => {
+export const handleResponse = (err, data, req, res) => {
     if (err) {
-        return handleError(res, err, 400);
+        return handleError(res, err.json.message, err.statusCode);
     }
 
-    return handleResult(res, data, 200);
+    const method = req.method
+    let statusCode = 200
+    if (method === "POST") {
+        statusCode = 201
+    }
+    if (method === "DELETE") {
+        statusCode = 204
+    }
+
+    return handleResult(res, data, statusCode);
 };
 
 export const handleResult = (res, data, code) => {

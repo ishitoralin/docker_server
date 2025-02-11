@@ -3,19 +3,33 @@ import Docker from "dockerode";
 const docker = new Docker();
 
 const systemController = {
-    GetAction: async (req, res) => {
-        try {
-            const action = req.params.action
-            if (docker[action]) {
-                docker[action]((err, data) => {
-                    return handleResponse(err, data, res)
-                })
-            } else {
-                return handleError(res, "", 404)
-            }
-        } catch (error) {
-            return handleError(res, error.message, 500)
-        }
+    GetPing: (req, res) => {
+        docker.ping((err, data) => {
+            return handleResponse(err, data, req, res);
+        })
+    },
+    GetInfo: (req, res) => {
+        docker.info((err, data) => {
+            return handleResponse(err, data, req, res);
+        })
+    },
+    GetVersion: (req, res) => {
+        docker.version((err, data) => {
+            return handleResponse(err, data, req, res);
+        })
+    },
+    // TODO handleResponse >> res.pipe
+    GetEvents: (req, res) => {
+        const query = req.query
+        docker.getEvents(query, (err, data) => {
+            return handleResponse(err, data, req, res);
+        })
+    },
+    GetSystemDF: (req, res) => {
+        const query = req.query
+        docker.df(query, (err, data) => {
+            return handleResponse(err, data, req, res);
+        })
     },
 }
 
