@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "$(which nodemon) ./index.js",
+    "dev": "$(which nodemon) ./bin/index.js",
     "start": "$(which node) ./index.js",
     "app": "sudo $(which node) ./index.js",
     "build": "node build_pkg.js"
