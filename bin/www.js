@@ -1,17 +1,15 @@
 #!/usr/bin/env node
-import express from 'express';
 import fs from "fs"
-import path from "path"
 import https from "https"
-import routers from './src/routers.js';
-const { generateCert } = require("../controllers/tlsController.js");
-const app = express();
+import os from "os"
+import app from "../index.js"
+import defaultPaths from '../init/pathDefault.js';
+import { generateCert } from "../controllers/tlsController.js"
 generateCert()
-const keyPath = "../otakey.pem";
-const certPath = "../otakey.cert";
+
 const options = {
-    key: fs.readFileSync(keyPath),
-    cert: fs.readFileSync(certPath)
+    key: fs.readFileSync(defaultPaths.keyPath),
+    cert: fs.readFileSync(defaultPaths.certPath)
 };
 
 const port = process.env.PORT || 8866;
@@ -35,8 +33,8 @@ server.listen(port, () => {
     const actualPort = server.address().port;
     const localIP = getLocalIP();
     console.log(`Server is running on:`);
-    console.log(`- Local:   http://localhost:${actualPort}`);
-    console.log(`- Network: http://${localIP}:${actualPort}`);
+    console.log(`- Local:   https://localhost:${actualPort}`);
+    console.log(`- Network: https://${localIP}:${actualPort}`);
 });
 
 server.on('error', (error) => {

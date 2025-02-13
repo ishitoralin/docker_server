@@ -1,16 +1,11 @@
 import forge from "node-forge";
 import fs from "fs"
-import path from "path";
-
-const { HandleCertPath } = require("../init/path_default")
-// 定義檔案輸出路徑
-const keyPath = "../otakey.pem";
-const certPath = "../otakey.cert";
+import defaultPaths from '../init/pathDefault.js';
 
 // 1. 生成私鑰
 export const generateCert = () => {
-    const isKeyExist = fs.existsSync(keyPath)
-    const isCertExist = fs.existsSync(certPath)
+    const isKeyExist = fs.existsSync(defaultPaths.keyPath)
+    const isCertExist = fs.existsSync(defaultPaths.certPath)
     if (!isKeyExist || !isCertExist) {
         const keypair = forge.pki.rsa.generateKeyPair(2048); // 2048 位金鑰
         const privateKey = forge.pki.privateKeyToPem(keypair.privateKey);

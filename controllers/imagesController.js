@@ -19,35 +19,60 @@ const imagesController = {
         })
     },
     GetImageInspect: (req, res) => {
-        const name = req.params.name;
-        const image = docker.getImage(name);
+        const id = req.params.id;
+        const image = docker.getImage(id);
 
         image.inspect((err, data) => {
             return handleResponse(err, data, req, res);;
         });
     },
     GetHistory: (req, res) => {
-        const name = req.params.name;
-        const image = docker.getImage(name);
+        const id = req.params.id;
+        const image = docker.getImage(id);
 
         image.history((err, data) => {
             return handleResponse(err, data, req, res);;
         });
     },
+    // TODO progreeSize always > totalSize, fix it
     GetExport: (req, res) => {
-        // TODO handleResponse >> res.pipe
         const id = req.params.id;
         const image = docker.getImage(id);
+        let totalSize = 0;
+        let progreeSize = 0;
 
-        image.get((err, data) => {
-            return handleResponse(err, data, req, res);;
+        image.inspect((err, data) => {
+            if (err) {
+                return handleError(res, err, 404)
+            }
+            totalSize = data.Size
+        });
+
+        image.get((err, stream) => {
+            if (err) {
+                return handleResponse(err, null, req, res);
+            }
+
+            res.setHeader('Content-Type', 'application/octet-stream');
+            res.setHeader('Content-Disposition', `attachment; filename=${id}.tar`);
+
+            stream.on("data", (chunk) => {
+                progreeSize += chunk.length;
+                console.log(`Export: ${progreeSize}/${totalSize} bytes, ${(progreeSize / totalSize * 100).toFixed(1)}%`);
+            })
+
+            stream.on('error', (err) => {
+                return handleResponse(err, null, req, res);
+            });
+
+            stream.pipe(res);
         });
     },
     // TODO handleResponse >> stream
     PostBuildImage: (req, res) => {
         const query = req.query
         const tarStream = req.body.tarStream;
-        const image = docker.getImage(query.name);
+        const image = docker.getImage(query.id);
 
         image.buildImage(tarStream, query, (err, data) => {
             return handleResponse(err, data, req, res);;
@@ -56,6 +81,10 @@ const imagesController = {
     PostTagImage: (req, res) => {
         const id = req.params.id;
         const body = req.body
+        if (!body || !body.tag || !body.repo) {
+            return handleError(res, "Invalid body", 400)
+        }
+        
         const image = docker.getImage(id);
         image.tag(body, (err, data) => {
             return handleResponse(err, data, req, res);;

@@ -4,7 +4,7 @@ import imagesController from '../controllers/imagesController.js'
 import containersController from '../controllers/containersController.js'
 import networksController from '../controllers/networksController.js'
 import volumesController from '../controllers/volumesController.js'
-
+import { authenticateToken } from "../controllers/userController.js"
 const router = express.Router();
 
 router.get('/api/docker/ping', systemController.GetPing);
@@ -13,9 +13,10 @@ router.get('/api/docker/version', systemController.GetVersion);
 router.get('/api/docker/events', systemController.GetEvents);
 router.get('/api/docker/system/df', systemController.GetSystemDF);
 
+
 router.get('/api/docker/images/json', imagesController.GetImagesList);
-router.get('/api/docker/images/:id/json', imagesController.GetImageInspect);
 router.get('/api/docker/images/search', imagesController.GetSearch);
+router.get('/api/docker/images/:id/json', imagesController.GetImageInspect);
 router.get('/api/docker/images/:id/history', imagesController.GetHistory);
 router.get('/api/docker/images/:id/get', imagesController.GetExport);
 router.post('/api/docker/build', imagesController.PostBuildImage);
@@ -47,6 +48,7 @@ router.post('/api/docker/networks/create', networksController.PostCreateNetwork)
 router.post('/api/docker/networks/:id/:action', networksController.PostConnectAction);
 router.post('/api/docker/networks/prune', networksController.PostPruneNetworks);
 router.delete('/api/docker/networks/:id', networksController.DeleteNetwork);
+
 
 router.get('/api/docker/volumes/:id', volumesController.GetVolumesInspect);
 router.get('/api/docker/volumes', volumesController.GetVolumesList);

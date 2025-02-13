@@ -18,12 +18,32 @@ const systemController = {
             return handleResponse(err, data, req, res);
         })
     },
-    // TODO handleResponse >> res.pipe
     GetEvents: (req, res) => {
-        const query = req.query
-        docker.getEvents(query, (err, data) => {
-            return handleResponse(err, data, req, res);
-        })
+        const query = req.query;
+        docker.getEvents(query, (err, stream) => {
+            if (err) {
+                return handleResponse(err, null, req, res);
+            }
+            res.setHeader('Content-Type', 'text/event-stream');
+            res.setHeader('Cache-Control', 'no-cache');
+            res.setHeader('Connection', 'keep-alive');
+
+            stream.on('data', (chunk) => {
+                res.write(`${chunk.toString()}`);
+            });
+
+            stream.on('end', () => {
+                res.end();
+            });
+
+            stream.on('error', (streamErr) => {
+                res.write(`${streamErr.toString()}`);
+            });
+
+            req.on('close', () => {
+                stream.destroy();
+            });
+        });
     },
     GetSystemDF: (req, res) => {
         const query = req.query
