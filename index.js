@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import routers from './src/routers.js';
+import fs from 'fs';
 const app = express()
 
 app.use(cors());
@@ -11,21 +12,23 @@ app.use(express.urlencoded({ limit: '500mb', extended: true }));
 
 app.use('/', routers)
 
-// app.use(express.static(path.join(__dirname, 'dist')));
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-// });
+const isExist = fs.existsSync('./dist');
 
-app.use((err, req, res, next) => {
-    console.log(err.message)
-    res.status(500)
-    res.send('500 - Server Error')
-})
-
-app.use('*', (req, res) => {
-    // res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-    res.status(404)
-    res.send('404 - Page not found')
-});
+if (isExist) {
+    app.use(express.static("./dist"));
+    app.use('*', (req, res) => {
+        res.sendFile('./dist/index.html');
+    });
+} else {
+    app.use((err, req, res, next) => {
+        console.log(err.message)
+        res.status(500)
+        res.send('500 - Server Error')
+    })
+    app.use('*', (req, res) => {
+        res.status(404)
+        res.send('404 - Page not found')
+    });
+}
 
 export default app

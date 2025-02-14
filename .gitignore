@@ -1,3 +1,5 @@
 node_modules
 otakey.cert
 otakey.pem
+dist
+build
