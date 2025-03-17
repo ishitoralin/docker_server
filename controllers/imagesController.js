@@ -78,13 +78,28 @@ const imagesController = {
             return handleResponse(err, data, req, res);;
         });
     },
+    PostCreateImage: async (req, res) => {
+        const { fromImage } = req.query;
+        if (!fromImage) {
+            return handleError(res, "Invalid image name", 404)
+        }
+
+        try {
+            const stream = await docker.pull(fromImage);
+            docker.modem.followProgress(stream, (err, data) => {
+                return handleResponse(err, data, req, res);
+            });
+        } catch (error) {
+            return handleError(res, error.message || "Failed to pull image", error.statusCode || 500);
+        }
+    },
     PostTagImage: (req, res) => {
         const id = req.params.id;
         const body = req.body
         if (!body || !body.tag || !body.repo) {
             return handleError(res, "Invalid body", 400)
         }
-        
+
         const image = docker.getImage(id);
         image.tag(body, (err, data) => {
             return handleResponse(err, data, req, res);;

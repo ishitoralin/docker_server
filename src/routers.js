@@ -21,7 +21,7 @@ router.get('/api/docker/images/:id/history', imagesController.GetHistory);
 router.get('/api/docker/images/:id/get', imagesController.GetExport);
 router.post('/api/docker/build', imagesController.PostBuildImage);
 // router.post('/api/docker/build/prune', imagesController.PostPruneCache);
-// router.post('/api/docker/images/create', imagesController.PostCreateImage);
+router.post('/api/docker/images/create', imagesController.PostCreateImage);
 // router.post('/api/docker/images/:id/push', imagesController.PostPushImage);
 router.post('/api/docker/images/:id/tag', imagesController.PostTagImage);
 router.post('/api/docker/images/prune', imagesController.PostPruneImages);
@@ -40,7 +40,7 @@ router.get('/api/docker/containers/:id/stats', containersController.GetStats);
 router.get('/api/docker/containers/:id/attach/ws', containersController.GetAttach);
 router.get('/api/docker/containers/:id/archive', containersController.GetArchive);
 // router.post('/api/docker/containers/create', containersController.PostCreateContainer);
-
+router.post('/api/docker/containers/:id/:actions', containersController.PostContainerActions);
 
 router.get('/api/docker/networks/:id', networksController.GetNetworkInspect);
 router.get('/api/docker/networks', networksController.GetNetworksList);

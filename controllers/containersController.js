@@ -92,6 +92,14 @@ const containersController = {
     //         return handleResponse(err, data, req, res);;
     //     })
     // }
+    PostContainerActions: (req, res) => {
+        const id = req.params.id;
+        const actions = req.params.actions;
+        const container = docker.getContainer(id);
+        container[actions]((err, data) => {
+            return handleResponse(err, data, req, res);;
+        })
+    }
 }
 
 export default containersController;
