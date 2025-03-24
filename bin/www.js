@@ -4,7 +4,7 @@ import https from "https"
 import os from "os"
 import app from "../index.js"
 import defaultPaths from '../init/pathDefault.js';
-import { generateCert } from "../controllers/tlsController.js"
+import generateCert from "../controllers/tlsController.js"
 generateCert()
 
 const options = {

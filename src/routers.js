@@ -4,7 +4,7 @@ import imagesController from '../controllers/imagesController.js'
 import containersController from '../controllers/containersController.js'
 import networksController from '../controllers/networksController.js'
 import volumesController from '../controllers/volumesController.js'
-import { authenticateToken } from "../controllers/userController.js"
+import { authenticateToken } from "../controllers/tokenController.js"
 const router = express.Router();
 
 router.get('/api/docker/ping', systemController.GetPing);

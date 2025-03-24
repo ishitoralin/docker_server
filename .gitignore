@@ -3,3 +3,4 @@ otakey.cert
 otakey.pem
 dist
 build
+.env

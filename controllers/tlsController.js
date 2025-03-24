@@ -3,7 +3,7 @@ import fs from "fs"
 import defaultPaths from '../init/pathDefault.js';
 
 // 1. 生成私鑰
-export const generateCert = () => {
+const generateCert = () => {
     const isKeyExist = fs.existsSync(defaultPaths.keyPath)
     const isCertExist = fs.existsSync(defaultPaths.certPath)
     if (!isKeyExist || !isCertExist) {
@@ -46,3 +46,5 @@ export const generateCert = () => {
         console.log(`Certificate path: ${certPath}`);
     }
 }
+
+export default generateCert
