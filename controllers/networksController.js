@@ -30,9 +30,11 @@ const networksController = {
         if (!validActions.includes(action)) {
             return handleError(res, { message: 'Invalid action.' }, 400);
         }
-        docker.network[id][action](body, (err, data) => {
+
+        const network = docker.getNetwork(id)
+        network[action](body, (err, data) => {
             return handleResponse(err, data, req, res);
-        });
+        })
     },
     PostPruneNetworks: (req, res) => {
         const query = req.query

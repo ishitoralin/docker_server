@@ -6,7 +6,7 @@ const imagesController = {
     GetImagesList: (req, res) => {
         const query = req.query
         docker.listImages(query, (err, data) => {
-            return handleResponse(err, data, req, res);;
+            return handleResponse(err, data, req, res);
         })
     },
     GetSearch: (req, res) => {
@@ -15,7 +15,7 @@ const imagesController = {
             return handleError(res, "Invalid query: term", 400)
         }
         docker.searchImages(query, (err, data) => {
-            return handleResponse(err, data, req, res);;
+            return handleResponse(err, data, req, res);
         })
     },
     GetImageInspect: (req, res) => {
@@ -23,7 +23,7 @@ const imagesController = {
         const image = docker.getImage(id);
 
         image.inspect((err, data) => {
-            return handleResponse(err, data, req, res);;
+            return handleResponse(err, data, req, res);
         });
     },
     GetHistory: (req, res) => {
@@ -31,7 +31,7 @@ const imagesController = {
         const image = docker.getImage(id);
 
         image.history((err, data) => {
-            return handleResponse(err, data, req, res);;
+            return handleResponse(err, data, req, res);
         });
     },
     // TODO progreeSize always > totalSize, fix it
@@ -75,7 +75,7 @@ const imagesController = {
         const image = docker.getImage(query.id);
 
         image.buildImage(tarStream, query, (err, data) => {
-            return handleResponse(err, data, req, res);;
+            return handleResponse(err, data, req, res);
         });
     },
     PostCreateImage: async (req, res) => {
@@ -102,20 +102,26 @@ const imagesController = {
 
         const image = docker.getImage(id);
         image.tag(body, (err, data) => {
-            return handleResponse(err, data, req, res);;
+            return handleResponse(err, data, req, res);
         });
     },
     PostPruneImages: (req, res) => {
         const query = req.query
         docker.pruneImages(query, (err, data) => {
-            return handleResponse(err, data, req, res);;
+            return handleResponse(err, data, req, res);
         });
     },
     PostCommit: (req, res) => {
         const query = req.query
         const body = req.body
-        docker.commit(query, body, (err, data) => {
-            return handleResponse(err, data, req, res);;
+
+        const container = docker.getContainer(query.container)
+        if (!container) {
+            return handleError(res, "Can't find container", 404)
+        }
+
+        container.commit({ ...query, ...body }, (err, data) => {
+            return handleResponse(err, data, req, res);
         });
     },
     DeleteImage: (req, res) => {
@@ -123,7 +129,7 @@ const imagesController = {
         const query = req.query
         const image = docker.getImage(id);
         image.remove(query, (err, data) => {
-            return handleResponse(err, data, req, res);;
+            return handleResponse(err, data, req, res);
         });
     }
 }
