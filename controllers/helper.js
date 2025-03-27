@@ -1,7 +1,7 @@
 import { exec, execSync, execFileSync } from 'child_process';
 
 export const handleResponse = (err, data, req, res) => {
-    console.log(err)
+    // console.log(err.json.message)
     if (err) {
         return handleError(res, err.json?.message || "An error occurred", err.statusCode || 500);
     }
@@ -44,7 +44,7 @@ export const handleError = (res, error, errCode) => {
                 error = "Unknown error occurred";
         }
     }
-
+    console.log(error)
     res.status(errCode).json({ status: errCode, error: error });
 };
 

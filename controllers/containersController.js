@@ -1,6 +1,7 @@
 import { handleResponse, handleError, handleResult } from "./helper.js";
 import Docker from "dockerode";
 const docker = new Docker();
+
 const containersController = {
     GetContainersList: (req, res) => {
         const query = req.query
@@ -29,14 +30,15 @@ const containersController = {
         const query = req.query
         const container = docker.getContainer(id);
         container.logs(query, (err, data) => {
-            return handleResponse(err, data, req, res);;
+            const bufferData = Buffer.from(data, 'utf-8').toString();
+            return handleResponse(err, bufferData, req, res);;
         })
     },
     GetChanges: (req, res) => {
         const id = req.params.id;
         const container = docker.getContainer(id);
         container.changes((err, data) => {
-            return handleResponse(err, data, req, res);;
+            return handleResponse(err, bufferData, req, res);;
         })
     },
     // TODO handleResponse >> res.pipe
