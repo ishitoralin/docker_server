@@ -12,7 +12,7 @@ const options = {
     cert: fs.readFileSync(defaultPaths.certPath)
 };
 
-const port = process.env.PORT || 8866;
+const port = process.env.PORT || 3000;
 app.set('port', port);
 
 const server = https.createServer(options, app);

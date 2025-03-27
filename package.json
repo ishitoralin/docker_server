@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "$(which nodemon) ./bin/www.js",
-    "start": "$(which node) ./index.js",
+    "start": "node ./bin/www.js",
     "app": "sudo $(which node) ./index.js",
     "build": "node build_pkg.js"
   },

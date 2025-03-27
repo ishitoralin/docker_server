@@ -1,8 +1,9 @@
 import { exec, execSync, execFileSync } from 'child_process';
 
 export const handleResponse = (err, data, req, res) => {
+    console.log(err)
     if (err) {
-        return handleError(res, err.json.message, err.statusCode);
+        return handleError(res, err.json?.message || "An error occurred", err.statusCode || 500);
     }
 
     const method = req.method
@@ -22,24 +23,26 @@ export const handleResult = (res, data, code) => {
 };
 
 export const handleError = (res, error, errCode) => {
-    if (errCode === 400 && !error) {
-        error = "400 - Bad request";
-    }
-
-    if (errCode === 401 && !error) {
-        error = "401 - Unauthorized"
-    }
-
-    if (errCode === 403 && !error) {
-        error = "403 - Forbidden";
-    }
-
-    if (errCode === 404 && !error) {
-        error = "404 - Page not found";
-    }
-
-    if (errCode === 500 && !error) {
-        error = "500 - Server Error";
+    if (!error) {
+        switch (errCode) {
+            case 400:
+                error = "400 - Bad request";
+                break;
+            case 401:
+                error = "401 - Unauthorized";
+                break;
+            case 403:
+                error = "403 - Forbidden";
+                break;
+            case 404:
+                error = "404 - Page not found";
+                break;
+            case 500:
+                error = "500 - Server Error";
+                break;
+            default:
+                error = "Unknown error occurred";
+        }
     }
 
     res.status(errCode).json({ status: errCode, error: error });
